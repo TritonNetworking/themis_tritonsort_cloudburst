@@ -1,0 +1,18 @@
+====
+Themis MapReduce/TritonSort CloudBurst Port README
+2015
+Michael Conley
+====
+
+This code is made available under 3-clause BSD (see LICENSE file), and is
+provided for mainly for eductional purposes. We will not be supporting this
+codebase moving forward, so please don't ask for feature requests, bug fixes,
+or runtime support. Themis and TritonSort are research prototypes, and were
+built for our research testbeds. They may not run on arbitrary platforms, and
+significant effort may be required to run them.
+
+This codebase includes a port of the CloudBurst project
+(http://sourceforge.net/projects/cloudburst-bio/) for Themis MapReduce.
+
+Place the cloudBurst_map files in src/tritonsort/mapreduce/functions/map/cloudBurst
+Place the cloudBurst_reduce files in src/tritonsort/mapreduce/functions/reduce/cloudBurst
