@@ -12,5 +12,36 @@ significant effort may be required to run them.
 This codebase includes a port of the CloudBurst project
 (http://sourceforge.net/projects/cloudburst-bio/) for Themis MapReduce.
 
-Place the cloudBurst_map files in src/tritonsort/mapreduce/functions/map/cloudBurst
-Place the cloudBurst_reduce files in src/tritonsort/mapreduce/functions/reduce/cloudBurst
+Place the files within src/ in the same directories in your main Themis directory.
+
+Add the following clause to src/tritonsort/mapreduce/functions/map/MapFunctionFactory.cc
+```
+  } else if (mapName == "CloudBurstMapFunction") {
+      mapFunction = new CloudBurstMapFunction(
+        params.get<uint32_t>("CLOUDBURST_MAX_ALIGN_DIFF"),
+        params.get<uint32_t>("CLOUDBURST_REDUNDANCY"),
+        params.get<int32_t>("CLOUDBURST_MIN_READ_LEN"),
+        params.get<int32_t>("CLOUDBURST_MAX_READ_LEN"));
+  }
+```
+
+Add the following clause to src/tritonsort/mapreduce/functions/reduce/ReduceFunctionFactory.cc:
+```
+  } else if (reduceName == "CloudBurstReduceFunction") {
+    return new CloudBurstReduceFunction(
+        params.get<uint32_t>("CLOUDBURST_MAX_ALIGN_DIFF"),
+        params.get<uint32_t>("CLOUDBURST_SEED_LEN"),
+        params.get<uint32_t>("CLOUDBURST_ALLOW_DIFFERENCES"),
+        params.get<uint32_t>("CLOUDBURST_BLOCK_SIZE"),
+        params.get<uint32_t>("CLOUDBURST_REDUNDANCY"));
+  }
+```
+
+Add the following clause to src/tritonsort/mapreduce/functions/partition/PartitionFunctionFactory.cc:
+```
+  } else if (partitionFunctionName.compare("CloudburstPartitionFunction") == 0) {
+    // Use a special (non-order-preserving) hash function for Cloudburst
+    partitionFunction = new (themis::memcheck)
+      CloudburstPartitionFunction(keyPartitioner);
+  }
+```
